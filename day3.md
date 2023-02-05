@@ -50,32 +50,65 @@ qplot(realdice, binwidth=1)
           col = "darkred", # you can also create a list of colors 
           # col=c("red","green","blue","beige")
           horiz = TRUE)
-  View(airquality)
-  barplot(airquality$Temp)
-  barplot(airquality$Temp)
-  barplot(airquality$Temp[order(airquality$Temp)]) #orders bars in ascending order
-  barplot(airquality$Temp[order(-airquality$Temp)]) #orders bars in descending order
-  barplot(airquality$Temp[order(airquality$Temp)],horiz = TRUE) #displaairquality$Temps barchart in horizontal view
-  barplot(airquality$Temp[order(airquality$Temp)],horiz = TRUE, col="red") #changes all bar colors to red
-  barplot(airquality$Temp[order(airquality$Temp)],horiz = TRUE, col=c("red","green","blue","beige")) #makes each bar a different color
-  colors() #shows list of available colors in console
-  #atomic vector - a one-dimensional data object created by c() or vector()
-  #if you get the '$ operator is invalid for atomic vectors' error, do this
-  x<- as.data.frame(Titanic)
-  barplot(x)
+  install.packages("dplyr")
+    pokemon <- read.csv('C:/Users/terra/projects/ColumbiaUniversity/lessons-main/resources/pokemon.csv')
+
+    View(pokemon) #view Pokemon as table
+
+    #checking number of rows and columns
+    nrow(pokemon)
+    ncol(pokemon)
+
+    #categorical columns
+    table(pokemon$Legendary)# Tells me how many pokemon are and are not legendary
+    table(pokemon$Type.1) #Counts the occurance of different types in the pokemon table
+    table(pokemon$Generation) # Counts the number of pokemon in each generation
+
+    # min and max values in table
+    min(pokemon$HP)
+    max(pokemon$HP)
+    max(pokemon$Name)
+
+    #checking for missing values
+    is.na(pokemon$Type.2)
+    sum(is.na(pokemon$Type.2))
 
 
-  #Count occurances of data in column
-  table(x$Age)
+    #rename columns
+    colnames(pokemon) #gets all column names in table
+    colnames(pokemon)[colnames(pokemon) == 'Type.1']<- "primary_type" #changes Type.1 to column type, we can now see this in the view
 
-  hist(Customer$Age) #gives us a histogram of frequency of age
-  hist(Customer$Age,breaks = 5) #suggests the number of bars but it creates 6 bars
+    #get all fire type pokemon
+    pokemon %>% filter(pokemon$Type.2 == "Fire")-> fire_pokemon
+    View(fire_pokemon)
 
-  hist(Customer$Age,breaks = c(0,40,60,100)) #setting strict categories, 3 bars (0-40) (40-60) (60-100)
+    # find the minimal speed of firetype pokemon
+    min(fire_pokemon$Speed)
 
-  hist(Customer$Age,breaks = c(0,40,60,100), freq=TRUE) #sorts histogram by frequency/order
 
-  hist(Customer$Age,breaks = c(0,40,60,100), freq=TRUE, col="blue", main="Histogram of Age") # sets chart title to "Histogram of age"
+    #find average attack of fire pokemon
+    mean(fire_pokemon$Attack)
+
+    # ploting pokemon data ( make sure ggplot is enabled)
+    ggplot(data = fire_pokemon, aes(x=HP))+geom_histogram()  #counts the number of fire pokemon by hp
+    #aes stands for aesthetic where we set the x-axis to be hp
+    ggplot(data = fire_pokemon, aes(x=HP))+geom_histogram(fill="red")
+    #changes the chart to red
+
+    ggplot(data = fire_pokemon, aes(x=Attack))+geom_histogram(fill="red")
+
+    #bar chart to show how many fire type pokemon are legendary
+    ggplot(data=fire_pokemon,aes(x=Legendary))+geom_bar(fill="pink")
+
+    pokemon %>% filter(primary_type=="Water") -> water_pokemon
+    mean(water)
+
+    ggplot(data=fire_pokemon,aes(x=Generation,fill=as.factor(Generation))) +geom_bar() #multi color bars representing the generations of fire pokemon
+
+    ggplot(data=fire_pokemon, aes(x=primary_type, fill=as.factor(primary_type)))+ geom_bar() #primary types of those with a second type of fire
+
+    ggplot(data = fire_pokemon, aes(x=Sp..Atk, y=Sp..Def)) + geom_point() #chart to see the correlation between special def and special attach of fire pokemon
+    # we can infer that if a pokemon has a higher special attack then it probabl has a higher special defense
 
   ```
 * Team activity - chose built in dataset and build a chart showing the data
